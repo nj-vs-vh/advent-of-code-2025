@@ -76,6 +76,7 @@ fn main() {
 
     match args.day {
         1 => days::day01::SecretEntrance.run(input, part, vis),
+        2 => days::day02::GiftShop.run(input, part, vis),
         _ => {
             println!("Solution is not yet implemented");
         }
