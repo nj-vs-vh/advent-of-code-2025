@@ -14,7 +14,7 @@ impl Solution for DayName {
         0
     }
 
-    fn solve_pt2(&self, input: Self::InputT, visualizer: &mut dyn Visualizer) -> Self::OutputT {
+    fn solve_pt2(&self, input: Self::InputT, _visualizer: &mut dyn Visualizer) -> Self::OutputT {
         0
     }
 }

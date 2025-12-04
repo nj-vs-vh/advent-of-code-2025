@@ -2,6 +2,8 @@ use std::io::Error;
 use std::iter::repeat;
 use std::{fmt::Display, fs};
 
+use itertools::Itertools;
+
 pub fn read_input(day: u8, example: bool) -> Result<String, Error> {
     let filename = if example { "input_example" } else { "input" };
     fs::read_to_string(format!("data/day{:02}/{}.txt", day, filename))
@@ -87,4 +89,25 @@ pub fn print_2d_vec<T: Display>(vm: &Vec<Vec<T>>) {
         println!("");
     }
     println!("");
+}
+
+pub fn manhattan_neighborhood(
+    i: &usize,
+    j: &usize,
+    width: &usize,
+    height: &usize,
+) -> Vec<(usize, usize)> {
+    let i_i32 = *i as i32;
+    let j_i32 = *j as i32;
+    (-1i32..=1i32)
+        .cartesian_product(-1i32..=1i32)
+        .filter(|(di, dj)| {
+            (*di != 0 || *dj != 0)
+                && (*i > 0 || *di >= 0)
+                && (*i < width - 1 || *di <= 0)
+                && (*j > 0 || *dj >= 0)
+                && (*j < height - 1 || *dj <= 0)
+        })
+        .map(|(di, dj)| ((i_i32 + di) as usize, (j_i32 + dj) as usize))
+        .collect()
 }

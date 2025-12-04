@@ -78,6 +78,7 @@ fn main() {
         1 => days::day01::SecretEntrance.run(input, part, vis),
         2 => days::day02::GiftShop.run(input, part, vis),
         3 => days::day03::Lobby.run(input, part, vis),
+        4 => days::day04::PrintingDepartment.run(input, part, vis),
         _ => {
             println!("Solution is not yet implemented");
         }
