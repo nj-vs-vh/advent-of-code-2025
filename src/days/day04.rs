@@ -71,13 +71,14 @@ impl Solution for PrintingDepartment {
             .collect();
         while to_remove.len() > 0 {
             let mut to_remove_next: HashSet<(usize, usize)> = HashSet::new();
-            for (i, j) in to_remove.into_iter() {
-                input[i][j] = false;
-                for (i_n, j_n) in manhattan_neighborhood(&i, &j, &width, &height) {
+            for (i, j) in to_remove.iter() {
+                input[*i][*j] = false;
+                for (i_n, j_n) in manhattan_neighborhood(i, j, &width, &height) {
                     if input[i_n][j_n] {
                         neighbors[i_n][j_n] -= 1;
-                        if neighbors[i_n][j_n] < 4 {
-                            to_remove_next.insert((i_n, j_n));
+                        let coords = (i_n, j_n);
+                        if neighbors[i_n][j_n] < 4 && !to_remove.contains(&coords) {
+                            to_remove_next.insert(coords);
                         }
                     }
                 }
