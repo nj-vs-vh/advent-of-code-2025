@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use itertools::Itertools;
 
 use crate::{solution::Solution, utils::manhattan_neighborhood, visualizer::Visualizer};
@@ -63,23 +65,24 @@ impl Solution for PrintingDepartment {
             }
         }
 
-        loop {
-            let accessible: Vec<(usize, usize)> = (0..height)
-                .cartesian_product(0..width)
-                .filter(|(i, j)| input[*i][*j] && neighbors[*i][*j] < 4)
-                .collect();
-            if accessible.len() == 0 {
-                break;
-            }
-
-            for (i, j) in accessible.into_iter() {
+        let mut to_remove: HashSet<(usize, usize)> = (0..height)
+            .cartesian_product(0..width)
+            .filter(|(i, j)| input[*i][*j] && neighbors[*i][*j] < 4)
+            .collect();
+        while to_remove.len() > 0 {
+            let mut to_remove_next: HashSet<(usize, usize)> = HashSet::new();
+            for (i, j) in to_remove.into_iter() {
                 input[i][j] = false;
                 for (i_n, j_n) in manhattan_neighborhood(&i, &j, &width, &height) {
                     if input[i_n][j_n] {
                         neighbors[i_n][j_n] -= 1;
+                        if neighbors[i_n][j_n] < 4 {
+                            to_remove_next.insert((i_n, j_n));
+                        }
                     }
                 }
             }
+            to_remove = to_remove_next;
         }
 
         let rolls_end: usize = input
