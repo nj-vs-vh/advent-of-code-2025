@@ -2,12 +2,12 @@ use itertools::Itertools;
 
 use crate::{solution::Solution, visualizer::Visualizer};
 
-type ingr = usize;
+type Ingr = usize;
 
 #[derive(Debug)]
 pub struct IngridientDB {
-    pub fresh_ranges: Vec<(ingr, ingr)>,
-    pub ingridients: Vec<ingr>,
+    pub fresh_ranges: Vec<(Ingr, Ingr)>,
+    pub ingridients: Vec<Ingr>,
 }
 
 pub struct Cafeteria;
@@ -23,16 +23,18 @@ impl Solution for Cafeteria {
             fresh_ranges: fresh_ranges_p
                 .lines()
                 .map(|line| {
-                    line.split('-')
+                    let (start, end) = line
+                        .split('-')
                         .take(2)
-                        .map(|i| i.parse::<ingr>().unwrap())
+                        .map(|i| i.parse::<Ingr>().unwrap())
                         .collect_tuple()
-                        .unwrap()
+                        .unwrap();
+                    (start, end + 1) // storing upper end as exclusive bound
                 })
                 .collect(),
             ingridients: ingridients_p
                 .lines()
-                .map(|i| i.parse::<ingr>().unwrap())
+                .map(|i| i.parse::<Ingr>().unwrap())
                 .collect(),
         }
     }
@@ -45,7 +47,7 @@ impl Solution for Cafeteria {
                 input
                     .fresh_ranges
                     .iter()
-                    .any(|&range| *i >= range.0 && *i <= range.1) as usize
+                    .any(|&range| *i >= range.0 && *i < range.1) as usize
             })
             .sum()
     }
@@ -56,9 +58,26 @@ impl Solution for Cafeteria {
         _visualizer: &mut dyn Visualizer,
     ) -> Self::OutputT {
         input.fresh_ranges.sort_by_key(|r| r.0);
+
         let mut res: usize = 0;
-        for (this, next) in input.fresh_ranges.iter().tuple_windows() {
-            res += std::cmp::min(next.0, this.1 + 1) - this.0;
+        for (idx, range) in input.fresh_ranges.iter().enumerate() {
+            if idx == input.fresh_ranges.len() - 1 {
+                res += range.1 - range.0; // last range
+            }
+
+            let mut right = *range;
+            for to_subtract in input.fresh_ranges[(idx + 1)..].iter() {
+                let left = (right.0, std::cmp::min(right.1, to_subtract.0));
+                if left.1 < left.0 {
+                    break;
+                }
+                res += left.1 - left.0;
+
+                right = (to_subtract.1, right.1);
+                if right.1 <= right.0 {
+                    break;
+                }
+            }
         }
         res
     }
