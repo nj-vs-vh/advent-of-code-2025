@@ -104,8 +104,6 @@ impl Solution for Playground {
             next_circuit_id += 1;
 
             if circuit_members.len() == 1 {
-                println!("{:?}", input[i]);
-                println!("{:?}", input[j]);
                 return (input[i][0] * input[j][0]) as usize;
             }
         }
@@ -113,14 +111,12 @@ impl Solution for Playground {
     }
 }
 
-fn make_connections(input: &Vec<[i64; 3]>) -> Vec<(usize, usize, f64)> {
-    let mut connections: Vec<(usize, usize, f64)> = Vec::new();
+fn make_connections(input: &Vec<[i64; 3]>) -> Vec<(usize, usize, i64)> {
+    let mut connections: Vec<(usize, usize, i64)> = Vec::new();
     for (i, a) in input.iter().enumerate() {
         for j in (i + 1)..input.len() {
             let b = input[j];
-            let distance = (((a[0] - b[0]).pow(2) + (a[1] - b[1]).pow(2) + (a[2] - b[2]).pow(2))
-                as f64)
-                .sqrt();
+            let distance = (a[0] - b[0]).pow(2) + (a[1] - b[1]).pow(2) + (a[2] - b[2]).pow(2);
             connections.push((i, j, distance))
         }
     }
