@@ -97,14 +97,13 @@ impl Solution for Playground {
             let mut new_circuit_members = HashSet::<usize>::new();
             new_circuit_members.extend(circuit_members.remove(circuit_id_i).unwrap());
             new_circuit_members.extend(circuit_members.remove(circuit_id_j).unwrap());
-
             for id in new_circuit_members.iter() {
                 circuit.insert(*id, next_circuit_id); // reassign all members to the newly created joint circuit
             }
             circuit_members.insert(next_circuit_id, new_circuit_members);
             next_circuit_id += 1;
 
-            if next_circuit_id > 2 && circuit_members.len() == 1 {
+            if circuit_members.len() == 1 {
                 println!("{:?}", input[i]);
                 println!("{:?}", input[j]);
                 return (input[i][0] * input[j][0]) as usize;
