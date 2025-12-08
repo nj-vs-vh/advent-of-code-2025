@@ -82,6 +82,7 @@ fn main() {
         5 => days::day05::Cafeteria.run(input, part, vis),
         6 => days::day06::TrashCompactor.run(input, part, vis),
         7 => days::day07::Laboratories.run(input, part, vis),
+        8 => days::day08::Playground.run(input, part, vis),
         _ => {
             println!("Solution is not yet implemented");
         }
