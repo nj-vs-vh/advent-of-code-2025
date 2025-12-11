@@ -44,6 +44,6 @@ fn area(a: &(u64, u64), b: &(u64, u64)) -> u64 {
     (a.0.abs_diff(b.0) + 1) * (a.1.abs_diff(b.1) + 1)
 }
 
-fn is_inscribed(a: &(u64, u64), b: &(u64, u64), outline: &Vec<(u64, u64)>) -> bool {
-    false
-}
+// fn is_inscribed(a: &(u64, u64), b: &(u64, u64), outline: &Vec<(u64, u64)>) -> bool {
+//     false
+// }
